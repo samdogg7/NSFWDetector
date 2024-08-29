@@ -77,6 +77,18 @@ private extension NSFWDetector {
             completion(.success(nsfwConfidence: observation.confidence))
         })
         
+        /**
+         * `@Required`:
+         * Set to true on Simulator or VisionKit will attempt to use GPU and fail
+         *
+         * `@Important`:
+         * Running on Simulator results in `significantly reduced accuracy`.
+         * Run on physical device for acurate results
+         */
+        #if targetEnvironment(simulator)
+        request.usesCPUOnly = true
+        #endif
+        
         /// Start the actual detection
         do {
             try requestHandler.perform([request])
